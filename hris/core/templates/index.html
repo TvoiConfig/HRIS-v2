@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+    <div class="min-vh-100 d-flex justify-content-center align-items-center text-center bg-light">
+        <div class="">
+            {% if user.is_authenticated %}
+                <h2>Привет, {{ user.username }}!</h2>
+                <p>Добро пожаловать в систему кадрового учета </p>
+            {% else %}
+                <h2>Добро пожаловать!</h2>
+                <p>Чтобы использовать информационную систему кадрового учета, <br/> нужно войти в аккаунт</p>
+                <form method="post" action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <button type="submit" href="{% url 'login' %}" class="btn btn-primary me-2">Войти</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
