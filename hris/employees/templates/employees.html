@@ -20,8 +20,8 @@
     <div class="col-md-4">
       <select name="sort" class="form-select">
         <option disabled {% if not sort_option %}selected{% endif %}>Сортировать...</option>
-        <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название (А–Я)</option>
-        <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название (Я–А)</option>
+        <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>ФИО (А–Я)</option>
+        <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>ФИО (Я–А)</option>
         <option value="created_new" {% if sort_option == 'created_new' %}selected{% endif %}>Новые</option>
         <option value="created_old" {% if sort_option == 'created_old' %}selected{% endif %}>Старые</option>
       </select>
