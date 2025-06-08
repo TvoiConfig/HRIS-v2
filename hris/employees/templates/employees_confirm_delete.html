@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<form method="post" hx-post="{{ request.path }}" hx-target="body" hx-swap="outerHTML">
+  {% csrf_token %}
+  <p>Удалить сотрудника <strong>{{ object.name }}</strong>?</p>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+  </div>
+</form>

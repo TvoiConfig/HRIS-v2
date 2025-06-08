@@ -14,7 +14,13 @@ class EmployeeForm(forms.ModelForm):
             'rate'
         ]
         widgets = {
-            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'date_of_birth': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control'
+                }
+            ),
         }
 
     def __init__(self, *args, **kwargs):

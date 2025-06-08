@@ -1,3 +1,4 @@
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
 from .forms import EmployeeForm
@@ -40,4 +41,23 @@ class EmployeesCreateView(CreateView):
 
     def form_valid(self, form):
         form.save()
+        return HttpResponse('<script>location.reload()</script>')
+
+class EmployeesUpdateView(UpdateView):
+    model = Employee
+    form_class = EmployeeForm
+    template_name = 'employee_form.html'
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('<script>location.reload()</script>')
+
+class EmployeesDeleteView(DeleteView):
+    model = Employee
+    template_name = 'employees_confirm_delete.html'
+    success_url = reverse_lazy('employees')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
         return HttpResponse('<script>location.reload()</script>')
