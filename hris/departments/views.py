@@ -1,31 +1,39 @@
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 from django.shortcuts import render
 from .models import Department
 
-# Create your views here.
-def departments_view(request):
-    search_query = request.GET.get('search', '').strip()
-    sort_option = request.GET.get('sort', '')
 
-    departments = Department.objects.all()
+class DepartmentListView(ListView):
+    model = Department
+    template_name = 'departments.html'
+    context_object_name = 'departments'
 
-    if search_query:
-        departments = departments.filter(
-            Q(name__icontains=search_query) |
-            Q(desc__icontains=search_query)
-        )
+    def get_queryset(self):
+        queryset = Department.objects.all()
+        search_query = self.request.GET.get('search', '').strip()
+        sort_option = self.request.GET.get('sort', '')
 
-    if sort_option == 'name_asc':
-        departments = departments.order_by('name')
-    elif sort_option == 'name_desc':
-        departments = departments.order_by('-name')
-    elif sort_option == 'created_new':
-        departments = departments.order_by('-created_at')
-    elif sort_option == 'created_old':
-        departments = departments.order_by('created_at')
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(desc__icontains=search_query)
+            )
 
-    return render(request, 'departments.html', {
-        'departments': departments,
-        'search_query': search_query,
-        'sort_option': sort_option
-    })
+        if sort_option == 'name_asc':
+            queryset = queryset.order_by('name')
+        elif sort_option == 'name_desc':
+            queryset = queryset.order_by('-name')
+        elif sort_option == 'created_new':
+            queryset = queryset.order_by('-created_at')
+        elif sort_option == 'created_old':
+            queryset = queryset.order_by('created_at')
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['search_query'] = self.request.GET.get('search', '')
+        context['sort_option'] = self.request.GET.get('sort', '')
+        return context
