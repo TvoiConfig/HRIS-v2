@@ -11,9 +11,26 @@ class EmployeeForm(forms.ModelForm):
             'position',
             'date_of_birth',
             'contact',
-            'rate'
+            'rate',
+            'category',
+            'start_date',
+            'end_date'
         ]
         widgets = {
+            'start_date': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control'
+                }
+            ),
+            'end_date': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control'
+                }
+            ),
             'date_of_birth': forms.DateInput(
                 format='%Y-%m-%d',
                 attrs={

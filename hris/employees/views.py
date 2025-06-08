@@ -22,8 +22,8 @@ class EmployeesListView(ListView):
             sort_mapping={
                 'name_asc': 'name',
                 'name_desc': '-name',
-                'created_new': '-created_at',
-                'created_old': 'created_at',
+                'start_date_new': '-start_date',
+                'start_date_old': 'start_date',
             }
         )
 

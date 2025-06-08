@@ -22,8 +22,8 @@
         <option disabled {% if not sort_option %}selected{% endif %}>Сортировать...</option>
         <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>ФИО (А–Я)</option>
         <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>ФИО (Я–А)</option>
-        <option value="created_new" {% if sort_option == 'created_new' %}selected{% endif %}>Новые</option>
-        <option value="created_old" {% if sort_option == 'created_old' %}selected{% endif %}>Старые</option>
+        <option value="start_date_new" {% if sort_option == 'start_date_new' %}selected{% endif %}>Новые</option>
+        <option value="start_date_old" {% if sort_option == 'start_date_old' %}selected{% endif %}>Старые</option>
       </select>
     </div>
     <div class="col-md-2">
@@ -38,7 +38,7 @@
         <th>ФИО</th>
         <th>Отдел</th>
         <th>Должность</th>
-        <th>Дата добавления</th>
+        <th>Дата трудоустройства</th>
         <th>Действия</th>
       </tr>
     </thead>
@@ -49,7 +49,7 @@
         <td>{{ e.name }}</td>
         <td>{{ e.department }}</td>
         <td>{{ e.position }}</td>
-        <td>{{ e.created_at|date:"d.m.Y" }}</td>
+        <td>{{ e.start_date|date:"d.m.Y" }}</td>
         <td>
           <a hx-get="{% url 'employee_update' e.pk %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-sm btn-outline-secondary me-1">Редактировать</a>
           <a hx-get="{% url 'employee_delete' e.pk %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-sm btn-outline-danger">Удалить</a>

@@ -7,6 +7,6 @@ from employees.models import Employee
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('name', 'department', 'position',)
-    list_filter = ('created_at',)
+    list_filter = ('start_date',)
     search_fields = ('name', 'department', 'position',)
     ordering = ('name',)
