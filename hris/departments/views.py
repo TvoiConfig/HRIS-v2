@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from .forms import DepartmentForm
 from .models import Department
-
+from core.utils.query import apply_search_and_sort
 
 class DepartmentListView(ListView):
     model = Department
@@ -12,26 +12,21 @@ class DepartmentListView(ListView):
     context_object_name = 'departments'
 
     def get_queryset(self):
-        queryset = Department.objects.all()
         search_query = self.request.GET.get('search', '').strip()
-        sort_option = self.request.GET.get('sort', '')
+        sort_option = self.request.GET.get('sort', '').strip()
 
-        if search_query:
-            queryset = queryset.filter(
-                Q(name__icontains=search_query) |
-                Q(desc__icontains=search_query)
-            )
-
-        if sort_option == 'name_asc':
-            queryset = queryset.order_by('name')
-        elif sort_option == 'name_desc':
-            queryset = queryset.order_by('-name')
-        elif sort_option == 'created_new':
-            queryset = queryset.order_by('-created_at')
-        elif sort_option == 'created_old':
-            queryset = queryset.order_by('created_at')
-
-        return queryset
+        return apply_search_and_sort(
+            Department.objects.all(),
+            search_query,
+            sort_option,
+            search_fields=['name', 'desc'],
+            sort_mapping={
+                'name_asc': 'name',
+                'name_desc': '-name',
+                'created_new': '-created_at',
+                'created_old': 'created_at',
+            }
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
