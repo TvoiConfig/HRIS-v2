@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <title>HRIS|{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'CSS/bootstrap.min.css' %}">
 </head>
 <body>
@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="mainNavbar">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="#">Сотрудники</a>
+              <a class="nav-link" href="{% url 'employees' %}">Сотрудники</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'departments' %}">Отделы</a>

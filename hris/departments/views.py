@@ -1,6 +1,5 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.db.models import Q
 from django.http import HttpResponse
 from .forms import DepartmentForm
 from .models import Department
