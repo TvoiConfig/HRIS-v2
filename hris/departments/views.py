@@ -1,6 +1,8 @@
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
-from django.shortcuts import render
+from django.http import HttpResponse
+from .forms import DepartmentForm
 from .models import Department
 
 
@@ -37,3 +39,31 @@ class DepartmentListView(ListView):
         context['search_query'] = self.request.GET.get('search', '')
         context['sort_option'] = self.request.GET.get('sort', '')
         return context
+
+class DepartmentCreateView(CreateView):
+    model = Department
+    form_class = DepartmentForm
+    template_name = 'department_form.html'
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('<script>location.reload()</script>')
+
+class DepartmentUpdateView(UpdateView):
+    model = Department
+    form_class = DepartmentForm
+    template_name = 'department_form.html'
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponse('<script>location.reload()</script>')
+
+class DepartmentDeleteView(DeleteView):
+    model = Department
+    template_name = 'department_confirm_delete.html'
+    success_url = reverse_lazy('departments')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponse('<script>location.reload()</script>')

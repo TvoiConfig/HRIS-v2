@@ -3,25 +3,26 @@
 
 {% block content %}
 <div class="container py-4">
-
-  <!-- Заголовок страницы -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3">Отделы компании</h1>
-    <a href="#" class="btn btn-primary">Добавить отдел</a>
+    <a href="{% url 'department_create' %}"
+       class="btn btn-primary"
+       hx-get="{% url 'department_create' %}"
+       hx-target="#modal-body"
+       data-bs-toggle="modal" data-bs-target="#modal">Добавить отдел</a>
   </div>
 
-  <!-- Поиск и сортировка -->
   <form class="row g-3 mb-4" method="get">
     <div class="col-md-6">
-      <input type="text" class="form-control" name="search" value="{{ search_query }}" placeholder="Поиск по названию отдела...">
+      <input type="text" name="search" class="form-control" placeholder="Поиск..." value="{{ search_query }}">
     </div>
     <div class="col-md-4">
-      <select class="form-select" name="sort">
-          <option disabled {% if not sort_option %}selected{% endif %}>Сортировать по...</option>
-          <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название (А–Я)</option>
-          <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название (Я–А)</option>
-          <option value="created_new" {% if sort_option == 'created_new' %}selected{% endif %}>Дата создания (новые)</option>
-          <option value="created_old" {% if sort_option == 'created_old' %}selected{% endif %}>Дата создания (старые)</option>
+      <select name="sort" class="form-select">
+        <option disabled {% if not sort_option %}selected{% endif %}>Сортировать...</option>
+        <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название (А–Я)</option>
+        <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название (Я–А)</option>
+        <option value="created_new" {% if sort_option == 'created_new' %}selected{% endif %}>Новые</option>
+        <option value="created_old" {% if sort_option == 'created_old' %}selected{% endif %}>Старые</option>
       </select>
     </div>
     <div class="col-md-2">
@@ -29,37 +30,42 @@
     </div>
   </form>
 
-  <!-- Таблица отделов -->
-  <div class="table-responsive">
-    <table class="table table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th scope="col">N</th>
-          <th scope="col">Название отдела</th>
-          <th scope="col">Описание</th>
-          <th scope="col">Дата создания</th>
-          <th scope="col">Действия</th>
-        </tr>
-      </thead>
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>N</th>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Дата создания</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in departments %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ d.name }}</td>
+        <td>{{ d.desc }}</td>
+        <td>{{ d.created_at|date:"d.m.Y" }}</td>
+        <td>
+          <a hx-get="{% url 'department_edit' d.pk %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-sm btn-outline-secondary me-1">Редактировать</a>
+          <a hx-get="{% url 'department_delete' d.pk %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-sm btn-outline-danger">Удалить</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">Отделов нет</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-      <tbody>
-      {% for department in departments %}
-        <tr>
-          <th scope="row">{{ forloop.counter }}</th>
-          <td>{{ department.name }}</td>
-          <td>{{ department.desc }}</td>
-          <td>{{ department.created_at }}</td>
-          <td>
-            <a href="#" class="btn btn-sm btn-outline-secondary me-1">Редактировать</a>
-            <a href="#" class="btn btn-sm btn-outline-danger">Удалить</a>
-          </td>
-        </tr>
-      </tbody>
-    {% empty %}
-        <a>Отделы не добавлены</a>
-    {% endfor %}
-    </table>
+<div class="modal fade" id="modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div id="modal-body" class="p-3">
+
+      </div>
+    </div>
   </div>
-
 </div>
 {% endblock %}
