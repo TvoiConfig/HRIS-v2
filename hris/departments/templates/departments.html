@@ -2,76 +2,82 @@
 {% block title %}Отделы{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Отделы компании</h1>
-  {% if user.is_staff %}
-    <a href="{% url 'department_create' %}"
-       class="btn btn-primary"
-       hx-get="{% url 'department_create' %}"
-       hx-target="#modal-body"
-       data-bs-toggle="modal" data-bs-target="#modal">Добавить отдел</a>
-  {% endif %}
-  </div>
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3">Отделы компании</h1>
+            {% if user.is_staff %}
+                <a href="{% url 'department_create' %}"
+                   class="btn btn-primary"
+                   hx-get="{% url 'department_create' %}"
+                   hx-target="#modal-body"
+                   data-bs-toggle="modal" data-bs-target="#modal">Добавить отдел</a>
+            {% endif %}
+        </div>
 
-  <form class="row g-3 mb-4" method="get">
-    <div class="col-md-6">
-      <input type="text" name="search" class="form-control" placeholder="Поиск..." value="{{ search_query }}">
-    </div>
-    <div class="col-md-4">
-      <select name="sort" class="form-select">
-        <option disabled {% if not sort_option %}selected{% endif %}>Сортировать...</option>
-        <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название (А–Я)</option>
-        <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название (Я–А)</option>
-        <option value="created_new" {% if sort_option == 'created_new' %}selected{% endif %}>Новые</option>
-        <option value="created_old" {% if sort_option == 'created_old' %}selected{% endif %}>Старые</option>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <button type="submit" class="btn btn-outline-secondary w-100">Применить</button>
-    </div>
-  </form>
+        <form class="row g-3 mb-4" method="get">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Поиск..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-4">
+                <select name="sort" class="form-select">
+                    <option disabled {% if not sort_option %}selected{% endif %}>Сортировать...</option>
+                    <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название (А–Я)
+                    </option>
+                    <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название (Я–А)
+                    </option>
+                    <option value="created_new" {% if sort_option == 'created_new' %}selected{% endif %}>Новые</option>
+                    <option value="created_old" {% if sort_option == 'created_old' %}selected{% endif %}>Старые</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-secondary w-100">Применить</button>
+            </div>
+        </form>
 
-  <table class="table table-hover align-middle">
-    <thead class="table-light">
-      <tr>
-        <th>N</th>
-        <th>Название</th>
-        <th>Описание</th>
-        <th>Дата создания</th>
-      {% if user.is_staff %}
-        <th>Действия</th>
-      {% endif %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for d in departments %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ d.name }}</td>
-        <td>{{ d.desc }}</td>
-        <td>{{ d.created_at|date:"d.m.Y" }}</td>
-      {% if user.is_staff %}
-        <td>
-          <a hx-get="{% url 'department_edit' d.pk %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-sm btn-outline-secondary me-1">Редактировать</a>
-          <a hx-get="{% url 'department_delete' d.pk %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-sm btn-outline-danger">Удалить</a>
-        </td>
-      {% endif %}
-      </tr>
-      {% empty %}
-      <tr><td colspan="5">Отделов нет</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-<div class="modal fade" id="modal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div id="modal-body" class="p-3">
-
-      </div>
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+            <tr>
+                <th>N</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Дата создания</th>
+                {% if user.is_staff %}
+                    <th>Действия</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for d in departments %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ d.name }}</td>
+                    <td>{{ d.desc }}</td>
+                    <td>{{ d.created_at|date:"d.m.Y" }}</td>
+                    {% if user.is_staff %}
+                        <td>
+                            <a hx-get="{% url 'department_edit' d.pk %}" hx-target="#modal-body" data-bs-toggle="modal"
+                               data-bs-target="#modal" class="btn btn-sm btn-outline-secondary me-1">Редактировать</a>
+                            <a hx-get="{% url 'department_delete' d.pk %}" hx-target="#modal-body"
+                               data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-sm btn-outline-danger">Удалить</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Отделов нет</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </div>
-</div>
+
+    <div class="modal fade" id="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div id="modal-body" class="p-3">
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

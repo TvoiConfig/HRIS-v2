@@ -12,8 +12,8 @@
                 <h2>Добро пожаловать!</h2>
                 <p>Чтобы использовать информационную систему кадрового учета, <br/> нужно войти в аккаунт</p>
                 <form method="post" action="{% url 'login' %}">
-                  {% csrf_token %}
-                  <button type="submit" href="{% url 'login' %}" class="btn btn-primary me-2">Войти</button>
+                    {% csrf_token %}
+                    <button type="submit" href="{% url 'login' %}" class="btn btn-primary me-2">Войти</button>
                 </form>
             {% endif %}
         </div>
