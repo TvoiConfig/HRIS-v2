@@ -12,7 +12,6 @@ class EmployeeForm(forms.ModelForm):
             'date_of_birth',
             'contact',
             'rate',
-            'category',
             'start_date',
             'end_date'
         ]

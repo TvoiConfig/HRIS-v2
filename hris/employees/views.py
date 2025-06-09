@@ -1,10 +1,15 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
 from .forms import EmployeeForm
 from .models import Employee
 from core.utils.query import apply_search_and_sort
 
+
+
+@method_decorator(staff_member_required(login_url='login'), name='dispatch')
 class EmployeesListView(ListView):
     model = Employee
     template_name = 'employees.html'
@@ -34,6 +39,7 @@ class EmployeesListView(ListView):
         context['sort_option'] = self.request.GET.get('sort', '')
         return context
 
+@method_decorator(staff_member_required(login_url='login'), name='dispatch')
 class EmployeesCreateView(CreateView):
     model = Employee
     form_class = EmployeeForm
@@ -43,6 +49,7 @@ class EmployeesCreateView(CreateView):
         form.save()
         return HttpResponse('<script>location.reload()</script>')
 
+@method_decorator(staff_member_required(login_url='login'), name='dispatch')
 class EmployeesUpdateView(UpdateView):
     model = Employee
     form_class = EmployeeForm
@@ -52,6 +59,7 @@ class EmployeesUpdateView(UpdateView):
         form.save()
         return HttpResponse('<script>location.reload()</script>')
 
+@method_decorator(staff_member_required(login_url='login'), name='dispatch')
 class EmployeesDeleteView(DeleteView):
     model = Employee
     template_name = 'employees_confirm_delete.html'
@@ -61,3 +69,7 @@ class EmployeesDeleteView(DeleteView):
         self.object = self.get_object()
         self.object.delete()
         return HttpResponse('<script>location.reload()</script>')
+
+class MyEmployeeListView(ListView):
+    model = Employee
+    template_name = 'employees.html'

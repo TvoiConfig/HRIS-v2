@@ -1,4 +1,6 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse
 from .forms import DepartmentForm
@@ -34,6 +36,7 @@ class DepartmentListView(ListView):
         context['sort_option'] = self.request.GET.get('sort', '')
         return context
 
+@method_decorator(staff_member_required(login_url='login'), name='dispatch')
 class DepartmentCreateView(CreateView):
     model = Department
     form_class = DepartmentForm
@@ -43,6 +46,7 @@ class DepartmentCreateView(CreateView):
         form.save()
         return HttpResponse('<script>location.reload()</script>')
 
+@method_decorator(staff_member_required(login_url='login'), name='dispatch')
 class DepartmentUpdateView(UpdateView):
     model = Department
     form_class = DepartmentForm
@@ -52,6 +56,7 @@ class DepartmentUpdateView(UpdateView):
         form.save()
         return HttpResponse('<script>location.reload()</script>')
 
+@method_decorator(staff_member_required(login_url='login'), name='dispatch')
 class DepartmentDeleteView(DeleteView):
     model = Department
     template_name = 'department_confirm_delete.html'

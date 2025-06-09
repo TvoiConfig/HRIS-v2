@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'schedule.apps.ScheduleConfig',
     'employees.apps.EmployeesConfig',
     'departments.apps.DepartmentsConfig',
     'core.apps.CoreConfig',
