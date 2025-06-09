@@ -1,17 +1,20 @@
 from calendar import HTMLCalendar
 from django.utils import timezone
 from django.views import View
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.mixins import StaffOrDepartmentHeadRequiredMixin
 from employees.models import Employee
 from .models import Schedule
+from datetime import date, time
+from django.urls import reverse
 
 
 class BaseScheduleView(View):
     template_name = 'schedule.html'
 
-    def get_calendar_context(self, employee, year=None, month=None):
+    @staticmethod
+    def get_calendar_context(employee, year=None, month=None):
         today = timezone.now().date()
 
         # Определяем текущий месяц и год
@@ -80,3 +83,39 @@ class MyScheduleView(LoginRequiredMixin, BaseScheduleView):
         employee = request.user.employee
         context = self.get_calendar_context(employee, year, month)
         return render(request, self.template_name, context)
+
+class ToggleScheduleView(StaffOrDepartmentHeadRequiredMixin, BaseScheduleView):
+    """
+    GET /schedule/toggle/<employee_id>/<year>/<month>/<day>/
+    - если есть Schedule → удаляем
+    - если нет → создаём с 09:00–18:00
+    Перенаправляем обратно на календарь того же сотрудника/месяца.
+    """
+    def get(self, request, employee_id, year, month, day):
+        # достаём сотрудника
+        employee = get_object_or_404(Employee, pk=employee_id)
+
+        # составляем дату
+        target_date = date(int(year), int(month), int(day))
+
+        # переключаем запись
+        obj, created = Schedule.objects.get_or_create(
+            employee=employee,
+            date=target_date,
+            defaults={'start_time': time(9, 0), 'end_time': time(18, 0)}
+        )
+        if not created:
+            # если запись уже была — удаляем
+            obj.delete()
+
+        # решаем, куда редиректить: на чужой календарь или на “моё расписание”
+        if hasattr(request.user, 'employee') and request.user.employee.id == employee.id:
+            # это мой график
+            return redirect(
+                reverse('my_schedule_month', args=[year, month])
+            )
+
+        # чужой график
+        return redirect(
+            reverse('schedule', args=[employee_id, year, month])
+        )
