@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -7,10 +8,12 @@ from .forms import DepartmentForm
 from .models import Department
 from core.utils.query import apply_search_and_sort
 
-class DepartmentListView(ListView):
+
+class DepartmentListView(LoginRequiredMixin, ListView):
     model = Department
     template_name = 'departments.html'
     context_object_name = 'departments'
+    login_url = 'login'
 
     def get_queryset(self):
         search_query = self.request.GET.get('search', '').strip()

@@ -76,6 +76,7 @@ class EmployeeScheduleView(StaffOrDepartmentHeadRequiredMixin, BaseScheduleView)
         return render(request, self.template_name, context)
 
 class MyScheduleView(LoginRequiredMixin, BaseScheduleView):
+    login_url = 'login'
     def get(self, request, year=None, month=None):
         if not hasattr(request.user, 'employee'):
             return render(request, 'no_employee.html', status=404)
