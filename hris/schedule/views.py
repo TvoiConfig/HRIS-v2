@@ -1,12 +1,11 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.utils.decorators import method_decorator
+from calendar import HTMLCalendar
+from django.utils import timezone
 from django.views import View
 from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
+from core.mixins import StaffOrDepartmentHeadRequiredMixin
 from employees.models import Employee
 from .models import Schedule
-from calendar import HTMLCalendar
 
 
 class BaseScheduleView(View):
@@ -66,15 +65,12 @@ class BaseScheduleView(View):
             'today': today
         }
 
-
-@method_decorator(staff_member_required(login_url='login'), name='dispatch')
-class EmployeeScheduleView(BaseScheduleView):
+class EmployeeScheduleView(StaffOrDepartmentHeadRequiredMixin, BaseScheduleView):
     permission_required = 'employees.view_schedule'
     def get(self, request, employee_id, year=None, month=None):
         employee = get_object_or_404(Employee, pk=employee_id)
         context = self.get_calendar_context(employee, year, month)
         return render(request, self.template_name, context)
-
 
 class MyScheduleView(LoginRequiredMixin, BaseScheduleView):
     def get(self, request, year=None, month=None):

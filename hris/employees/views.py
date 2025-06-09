@@ -6,21 +6,30 @@ from django.http import HttpResponse
 from .forms import EmployeeForm
 from .models import Employee
 from core.utils.query import apply_search_and_sort
+from core.mixins import StaffOrDepartmentHeadRequiredMixin
 
 
-
-@method_decorator(staff_member_required(login_url='login'), name='dispatch')
-class EmployeesListView(ListView):
+class EmployeesListView(StaffOrDepartmentHeadRequiredMixin, ListView):
     model = Employee
     template_name = 'employees.html'
     context_object_name = 'employees'
 
     def get_queryset(self):
+        qs = Employee.objects.all()
+
+        user = self.request.user
+        # Если не is_staff — фильтрует по отделу главы
+        if not user.is_staff:
+            # берет отдел, которым он руководит
+            dept = user.employee.headed_department
+            qs = qs.filter(department=dept)
+
+        # применение поиска и сортировки
         search_query = self.request.GET.get('search', '').strip()
         sort_option = self.request.GET.get('sort', '')
 
         return apply_search_and_sort(
-            Employee.objects.all(),
+            qs,
             search_query,
             sort_option,
             search_fields=['name', 'position', 'department__name'],
@@ -34,7 +43,6 @@ class EmployeesListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context['search_query'] = self.request.GET.get('search', '')
         context['sort_option'] = self.request.GET.get('sort', '')
         return context
@@ -69,7 +77,3 @@ class EmployeesDeleteView(DeleteView):
         self.object = self.get_object()
         self.object.delete()
         return HttpResponse('<script>location.reload()</script>')
-
-class MyEmployeeListView(ListView):
-    model = Employee
-    template_name = 'employees.html'

@@ -22,14 +22,14 @@
             </li>
               {% if user.is_staff %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'employees' %}">Сотрудники</a>
+              <a class="nav-link" href="{% url 'employees' %}">Все сотрудники</a>
             </li>
               {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'my_schedule' %}">Моё расписание</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'my_schedule' %}">Мои сотрудники</a>
+              <a class="nav-link" href="{% url 'employees' %}">Мои сотрудники</a>
             </li>
           </ul>
 
