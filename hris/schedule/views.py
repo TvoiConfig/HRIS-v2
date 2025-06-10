@@ -92,6 +92,7 @@ class ToggleScheduleView(StaffOrDepartmentHeadRequiredMixin, BaseScheduleView):
     - если нет → создаём с 09:00–18:00
     Перенаправляем обратно на календарь того же сотрудника/месяца.
     """
+    no_permission_url = "my_schedule"
     def get(self, request, employee_id, year, month, day):
         # достаём сотрудника
         employee = get_object_or_404(Employee, pk=employee_id)

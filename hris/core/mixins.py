@@ -9,7 +9,7 @@ class StaffOrDepartmentHeadRequiredMixin(AccessMixin):
     Иначе — редиректит на login_url или на no_permission.
     """
     login_url = 'login'
-    no_permission_url = 'no_permission'  # определите в urls.py страницу «Нет доступа»
+    no_permission_url = 'login'  # определите в urls.py страницу «Нет доступа»
 
     def dispatch(self, request, *args, **kwargs):
         user = request.user
