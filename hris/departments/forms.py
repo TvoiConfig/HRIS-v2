@@ -5,7 +5,7 @@ from .models import Department
 class DepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
-        fields = ['name', 'desc']
+        fields = ['name', 'desc', 'head']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -14,6 +14,11 @@ class DepartmentForm(forms.ModelForm):
             'desc': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Описание отдела',
+                'rows': 3
+            }),
+            'head': forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Глава отдела',
                 'rows': 3
             }),
         }
