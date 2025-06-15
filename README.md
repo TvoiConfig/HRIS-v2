@@ -67,7 +67,7 @@
 1. Клонируйте репозиторий:
 
 ```bash
-git clone https://github.com/TvoiConfig/HRIS-v2.git
+git clone https://github.com/TvoiConfig/HRIS.git
 cd hris
 ```
 
@@ -101,7 +101,7 @@ python manage.py runserver
 
 5. Перейдите по адресу [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-6. Войдите в админку и создайте учетные записи для работников
+6. Войдите в админку [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) и создайте учетные записи для работников
 
 ---
 ## Структура проекта
